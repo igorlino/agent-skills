@@ -1,6 +1,6 @@
 # rumdl: pitfalls
 
-Auto-fixes that change meaning, and results that surprise.
+Auto-fixes that change meaning or the rendered page, and results that surprise.
 Each one was reproduced on rumdl 0.3.5.
 Re-check on a newer version before you rely on it: a fixed bug is good news, and the advice to read the diff still holds.
 
@@ -8,6 +8,7 @@ Re-check on a newer version before you rely on it: a fixed bug is good news, and
 
 - [MD063 heading case](#md063-heading-case)
 - [MD038 spaces in code spans](#md038-spaces-in-code-spans)
+- [Fixes that change the rendered page](#fixes-that-change-the-rendered-page)
 - [Changes that are usually fine](#changes-that-are-usually-fine)
 - [Findings without an auto-fix](#findings-without-an-auto-fix)
 - [`--enable all` uses default options](#--enable-all-uses-default-options)
@@ -45,6 +46,15 @@ That is right for a typo, and wrong when the space is the point:
 becomes `` `tool.clean` is not `tool.clean`. ``, which is false.
 Before the formatting pass, reword such sentences so they do not depend on the space: "`tool.clean` with a trailing space".
 
+## Fixes that change the rendered page
+
+These change no words, so the word diff does not show them, but a reader sees the difference.
+
+| Rule | Fix | Check |
+| --- | --- | --- |
+| MD090 (opt-in) | Deletes a horizontal rule before a heading | List the deleted rules and ask whether they were wanted |
+| MD076 | Makes a list's spacing consistent, which can turn a tight list into a loose one (a blank line between items) | Read the rendered list in the diff |
+
 ## Changes that are usually fine
 
 These change a token, so they show up in the word diff, but they rarely change meaning.
@@ -66,8 +76,11 @@ The rest need a decision:
 | Rule | Finding | Usual fix |
 | --- | --- | --- |
 | MD036 | A bold or italic line used as a heading | Make it a real heading, or end it with punctuation (`**Fix:**`) so it reads as a label |
-| MD041 | The file does not start with a top-level heading | Add one, or `per-file-ignores` for templates that start with a comment |
+| MD041 | The file does not start with a top-level heading | Add one, or `per-file-ignores` for templates and include-only files |
 | MD024 | Duplicate heading text | Rename, or accept in a changelog |
+
+Some appear only after `rumdl fmt` has run: once blank lines are added around a bold line, MD036 sees it.
+Read the leftovers after a fix on a scratch copy.
 
 ## `--enable all` uses default options
 
@@ -80,17 +93,18 @@ Use it to see what could fire, never as the config.
 
 `rumdl fmt` applies the fixes and exits 0, even when findings without a fix remain.
 `rumdl check` and `rumdl check --fix` exit 1 when any finding remains.
-A CI gate must run `rumdl check`.
+A gate must run `rumdl check`.
 
 ## Your run is not CI's run
 
-rumdl finds its config by searching up from each file, and applies a user-level config (`~/.config/rumdl/` and the other locations in `configuration/index.md`) when the project has none.
+rumdl finds its config by searching up from each file, and applies a user-level config (`~/.config/rumdl/` and the other locations in rumdl's `docs/configuration/index.md`) when the project has none.
 It also reads a markdownlint config when there is no rumdl config.
 So a run on your machine can use rules that CI does not see.
 
 | Symptom | Check |
 | --- | --- |
-| Local and CI disagree | `rumdl config file` in both: the loaded file must be the project's `.rumdl.toml` |
+| Local and CI disagree | `rumdl config file` in both: the loaded file must be the project's `.rumdl.toml`. Compare `rumdl --version` too |
 | A wrapper script gives other results than `rumdl check .` | The wrapper may pass `--no-config`, `--enable` or `--config`, which replace the project config |
+| A file you passed by name is skipped | It matches an `exclude` pattern, which applies to named files too; `--no-exclude` turns that off |
 | A finding mentions a rule you did not enable | `rumdl config` shows the effective rule set, and where each value came from |
 | A typo in `.rumdl.toml` is silently ignored | Run with `--deny-config-warnings`, which makes config warnings exit 2 |

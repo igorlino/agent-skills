@@ -4,13 +4,21 @@
     "name": "Igor Lino"
   },
   "metadata": {
-    "description": "Agent skills for developer tools: the judgment a tool's --help does not give"
+    "description": "Agent skills for developer tools: the judgment a tool's --help does not give. Includes the justz plugin from its own repository."
   },
   "plugins": [
     {
       "name": "agent-skills",
       "source": "./",
       "description": "Skills for adopting and tuning developer tools, starting with the rumdl Markdown linter"
+    },
+    {
+      "name": "justz",
+      "source": {
+        "source": "github",
+        "repo": "igorlino/justz"
+      },
+      "description": "Skills for running the justz CLI and for authoring discoverable justfiles (hosted in igorlino/justz)"
     }
   ]
 }

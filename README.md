@@ -20,11 +20,15 @@ In Claude Code, as a plugin:
 /plugin install agent-skills@agent-skills
 ```
 
+The same marketplace also offers the justz skills, which live in the [justz repository](https://github.com/igorlino/justz): `/plugin install justz@agent-skills`.
+
 ## Skills
 
 | Skill | For |
 | --- | --- |
 | [rumdl](skills/rumdl/SKILL.md) | Adopting, tuning and reviewing the rumdl Markdown linter in a repository |
+
+Skills that ship with a tool live in its repository; [CATALOG.md](CATALOG.md#skills-in-other-repositories) lists them too.
 
 [CATALOG.md](CATALOG.md) says, for each skill, what it teaches, the gap it fills against other public skills, and what it leaves out.
 

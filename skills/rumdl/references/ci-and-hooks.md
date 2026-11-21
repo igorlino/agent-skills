@@ -8,12 +8,14 @@ All three call `rumdl check` with the project's `.rumdl.toml` and no extra rule 
 - [Task runner](#task-runner)
 - [GitHub Actions](#github-actions)
 - [Other CI systems](#other-ci-systems)
+- [No CI](#no-ci)
 - [pre-commit](#pre-commit)
 - [Upgrading rumdl](#upgrading-rumdl)
 
 ## Task runner
 
-Two recipes: one that checks and one that fixes.
+If a wrapper script or recipe already runs rumdl, extend it instead of adding a second command: tests and docs often describe the existing one.
+Otherwise add two recipes: one that checks and one that fixes.
 Fail with install advice when rumdl is missing, instead of a bare "command not found".
 
 ```just
@@ -64,6 +66,11 @@ Install rumdl with a package manager the runner already has (`pip install rumdl=
 `--output-format` selects a report format the CI system understands; `rumdl check --help` lists them for the installed version.
 
 Add `--deny-config-warnings` in CI: a typo in `.rumdl.toml` then fails the build (exit 2) instead of being ignored with a warning.
+
+## No CI
+
+When the gate is a local command (`just check`, `make check`, a pre-commit hook), pin the version where people install rumdl: a Brewfile, `mise.toml`, a `devDependencies` entry or the install section of the README.
+Have the gate print `rumdl --version` or check it, so a contributor with an older or newer rumdl learns why results differ.
 
 ## pre-commit
 

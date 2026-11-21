@@ -56,3 +56,23 @@ A scenario passes when the agent does every item under "Expect" and nothing unde
 
 - Reads the finding first: tables are not checked by default, so it confirms the config and the line.
 - Prefers fixing the text; otherwise uses an inline comment on that line, not a global change.
+
+## 5. Extend a links-only config to style linting
+
+**Prompt:** "This repository only checks Markdown links with rumdl today.
+Extend it to real Markdown style linting with rumdl, and make it pass."
+
+**Expect:**
+
+- Replaces the narrow `enable = [...]` list with the default rule set, so the link rules keep running.
+- Finds and updates the tests, wrappers and docs that assert the old config.
+- Excludes generated files that a test compares byte for byte, and keeps link checks on files shared with another repository by ignoring only the style rules that fire there.
+- Reads the leftovers after a scratch `rumdl fmt`, including findings that only appear after the fix.
+- Lists the fixes that change the rendered page (MD090, MD076) and asks about them.
+- Without CI, pins the rumdl version where people install it.
+- Reports which tests failed before it started.
+
+**Must not:**
+
+- Use `exclude` for files whose links must still be checked.
+- Add a second lint command next to an existing wrapper.

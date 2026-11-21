@@ -7,6 +7,16 @@ A skill is listed here only when it teaches something an agent cannot get from t
 | --- | --- | --- |
 | [rumdl](skills/rumdl/SKILL.md) | Tool | Adopting, tuning and reviewing the rumdl Markdown linter in a repository |
 
+## Skills in other repositories
+
+Skills that ship with a tool live in that tool's repository, so they are versioned with it.
+Each repository describes its own skills; this table only points to them.
+
+| Skill | For | Install |
+| --- | --- | --- |
+| [justz-cli](https://github.com/igorlino/justz/tree/main/skills/justz-cli) | Running and troubleshooting the `justz` CLI on top of `just` | `npx skills add igorlino/justz --skill justz-cli` |
+| [justfile-authoring](https://github.com/igorlino/justz/tree/main/skills/justfile-authoring) | Authoring discoverable, documented justfiles | `npx skills add igorlino/justz --skill justfile-authoring` |
+
 ## rumdl
 
 **Install:** `npx skills add igorlino/agent-skills --skill rumdl`
@@ -22,6 +32,7 @@ A skill is listed here only when it teaches something an agent cannot get from t
 - Auto-fixes that change meaning, each reproduced on a named rumdl version.
 - How to keep a repository's own checks working, such as line budgets and string searches in docs.
 - Why a local run can differ from CI: user-level config, markdownlint fallback and wrapper flags.
+- How to extend an existing narrow config without losing its link checks, and how to treat files that must stay byte-identical.
 
 **The gap it fills.**
 A survey of public rumdl skills on GitHub on 2026-11-21 found six.
@@ -45,4 +56,4 @@ This skill sends the agent to the installed binary (`rumdl explain`, `rumdl conf
 Editor and LSP setup.
 Writing the prose itself.
 
-**Tested with:** rumdl 0.3.5.
+**Tested with:** rumdl 0.3.5, and in a fresh agent session that extended a links-only rumdl setup to style linting on a repository it had not seen (scenario 5 in [evals/rumdl.md](evals/rumdl.md)).
