@@ -1,36 +1,27 @@
 # agent-skills
 
-Skills that teach coding agents the judgment a tool's `--help` leaves out: which options fit your repository, which automatic fixes change meaning, and how to adopt the tool without a messy history.
-
-## What a skill changes
-
-Ask an agent to "add Markdown linting with rumdl" to a repository.
-
-| | Without the skill | With the `rumdl` skill |
-| --- | --- | --- |
-| Config | `--enable all`: 1,422 findings, many from rules rumdl keeps off on purpose | Two or three candidate configs measured on a scratch copy, a reason next to each choice |
-| Automatic fixes | Applied as they come: `# justz` becomes `# Justz`, and a meaningful space disappears from `` `tool.clean ` `` | Text the fix would damage is reworded first, then a word-level diff checks that the formatting pass changed no words |
-| Your tests | The reflow makes the README 178 lines, and a 150-line budget test fails | Tests that read Markdown are found in the survey and adapted before the fix |
-| Review | Hand edits and hundreds of reformatted lines are easy to mix in one commit | Hand fixes first, then a formatting-only commit listed in `.git-blame-ignore-revs` |
-
-The left column is what a first attempt on [justz](https://github.com/igorlino/justz) produced, measured on a scratch copy; the right column is what an agent with only the skill did on another repository.
+Skills for coding agents such as Claude Code, Codex and Cursor.
+Each one teaches your agent to use a developer tool the way an experienced maintainer would: choose settings that fit your repository, check what automatic fixes change, and ask you before rewriting many files.
 
 ## Skills
 
-| Skill | Use it when | Needs | Tested with |
-| --- | --- | --- | --- |
-| [rumdl](skills/rumdl/SKILL.md) | Adding, extending or reviewing Markdown linting with rumdl | rumdl, git | rumdl 0.3.5 |
+| Skill | What your agent can do with it | Install from |
+| --- | --- | --- |
+| [rumdl](skills/rumdl/SKILL.md) | Set up, extend or review Markdown linting with [rumdl](https://github.com/rvben/rumdl) | this repository |
+| [justz-cli](https://github.com/igorlino/justz/tree/main/skills/justz-cli) | Run and troubleshoot the [justz](https://github.com/igorlino/justz) CLI on top of `just` | `igorlino/justz` |
+| [justfile-authoring](https://github.com/igorlino/justz/tree/main/skills/justfile-authoring) | Write discoverable, documented justfiles | `igorlino/justz` |
 
-[CATALOG.md](CATALOG.md) has, for each skill, what it teaches, the gap it fills against other public skills, and what it leaves out.
-It also lists skills that ship in a tool's own repository, such as the [justz](https://github.com/igorlino/justz) skills.
+The justz skills live in the justz repository, so they are versioned with the tool.
+[CATALOG.md](CATALOG.md) describes each skill in detail.
 
 ## Install
 
 With the [skills CLI](https://github.com/vercel-labs/skills) (Node.js 22.20 or later), for Claude Code, Codex, Cursor and the other agents it supports:
 
 ```bash
-npx skills add igorlino/agent-skills --skill rumdl        # into this project
-npx skills add igorlino/agent-skills --skill rumdl -g     # for every project
+npx skills add igorlino/agent-skills --skill rumdl               # into this project
+npx skills add igorlino/agent-skills --skill rumdl -g            # for every project
+npx skills add igorlino/justz --skill justfile-authoring         # a skill from another repository
 npx skills use igorlino/agent-skills@rumdl --agent claude-code   # try it once, without installing
 ```
 
@@ -50,15 +41,22 @@ In Claude Code, as a plugin:
 
 ## Use
 
-There is no command to run.
-The agent loads a skill when your request matches its description, for example:
+There is nothing to run.
+Ask your agent in your own words, and it loads the skill when the request matches:
 
 - "Add Markdown linting with rumdl to this repository."
 - "This repo only checks links with rumdl; lint style too."
 - "Review our `.rumdl.toml`."
 - "rumdl passes locally but fails in CI."
 
-The skill makes the agent ask before a choice that rewrites many files, such as the line-length strategy.
+Without the skill, an agent tends to turn on every rule and apply every automatic fix.
+In one real run that meant 1,422 findings, headings rewritten in title case, and a test that failed after the reformat.
+With the skill, the agent:
+
+1. looks at your repository first: its existing checks, its tests, its generated files;
+2. compares a few configurations on a copy, and asks you about the ones that rewrite many files;
+3. fixes by hand what the automatic fix would get wrong;
+4. commits the automatic reformat on its own, so you can review it at a glance.
 
 ## How the skills are made
 
