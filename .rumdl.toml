@@ -1,0 +1,21 @@
+# Markdown lint policy for this repository: run `just md-lint`, fix with `just md-fix`.
+# The same policy as skills/rumdl/references/policy.md#a-starting-config, with one more rule.
+
+[global]
+# The files are read on GitHub and on skills.sh.
+flavor = "gfm"
+# MD060: tables keep one format.
+# MD084: the files are instructions for agents, so hidden characters must not slip past a reviewer.
+extend-enable = ["MD060", "MD084"]
+
+[MD013]
+# One sentence per line instead of a width limit: a word change is a one-line diff.
+line-length = 0
+reflow = true
+reflow-mode = "sentence-per-line"
+# Code blocks hold real commands and output; they stay as written.
+code-blocks = false
+
+[MD060]
+# Compact tables: editing one cell does not re-pad the whole table.
+style = "compact"

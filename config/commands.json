@@ -1,0 +1,38 @@
+{
+  "name": "agent-skills",
+  "groups": {
+    "core": {
+      "label": "Core",
+      "commands": {
+        "check": {
+          "desc": "Check the documentation against the justfile and the registry order"
+        },
+        "ci": {
+          "desc": "Everything CI runs: justfile docs, Markdown lint, skill checks"
+        },
+        "help": {
+          "desc": "Full command reference, or the focused docs of one group or command (help [group] [term]); -b browses, -j emits JSON"
+        },
+        "md-fix": {
+          "desc": "Apply the rumdl fixes to the Markdown files (rewrites them)",
+          "detail": "Rewrites files in place. Read the diff before you commit it: some fixes change words, see skills/rumdl/references/pitfalls.md. Findings without an automatic fix remain; run md-lint afterwards."
+        },
+        "md-lint": {
+          "desc": "Lint the Markdown files with rumdl and the rules in .rumdl.toml",
+          "exits": {
+            "0": "no findings",
+            "1": "a finding, or rumdl is missing"
+          }
+        },
+        "skills-check": {
+          "desc": "Check every skill: frontmatter, SKILL.md size, links that leave the skill, catalog entry",
+          "exits": {
+            "0": "every skill passes",
+            "1": "a skill fails a check"
+          }
+        }
+      }
+    }
+  },
+  "tagline": "Agent skills for developer tools, published on skills.sh"
+}

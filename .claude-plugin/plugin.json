@@ -1,0 +1,17 @@
+{
+  "name": "agent-skills",
+  "version": "0.1.0",
+  "description": "Skills for adopting and tuning developer tools, starting with the rumdl Markdown linter",
+  "author": {
+    "name": "Igor Lino"
+  },
+  "homepage": "https://github.com/igorlino/agent-skills",
+  "repository": "https://github.com/igorlino/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "rumdl",
+    "markdown",
+    "lint"
+  ]
+}
